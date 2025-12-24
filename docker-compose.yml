@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # SQL Server con bases de datos restauradas
+  sqlserver:
+    build:
+      context: .
+      dockerfile: Database/Dockerfile.sqlserver
+    container_name: fichadas-sqlserver
+    ports:
+      - "14330:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${SA_PASSWORD:-Axoft1988!}
+      - MSSQL_PID=Developer
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - fichadas-network
+    restart: unless-stopped
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${SA_PASSWORD:-Axoft1988!}" -C -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  # Backend - ASP.NET Core 8 API
+  backend:
+    build:
+      context: ./Backend/FichadasAPI
+      dockerfile: Dockerfile
+    container_name: fichadas-api
+    ports:
+      - "5210:5210"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5210
+      - ConnectionStrings__FichadasDB=Server=sqlserver,1433;Database=FichadasDB;User Id=sa;Password=${SA_PASSWORD:-Axoft1988!};TrustServerCertificate=True;
+      - ConnectionStrings__TangoDB=Server=sqlserver,1433;Database=DELTA4;User Id=sa;Password=${SA_PASSWORD:-Axoft1988!};TrustServerCertificate=True;
+      - JwtSettings__SecretKey=${JWT_SECRET:-CAMBIAR_ESTA_CLAVE_SECRETA_EN_PRODUCCION_MINIMO_32_CARACTERES}
+      - JwtSettings__Issuer=FichadasAPI
+      - JwtSettings__Audience=FichadasClient
+      - JwtSettings__ExpirationMinutes=480
+      - TangoSettings__DatabaseName=DELTA4
+      - TangoSettings__Empresa=Colombraro
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - fichadas-network
+    restart: unless-stopped
+
+  # Frontend - React con Nginx
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=http://localhost:5210/api
+    container_name: fichadas-frontend
+    ports:
+      - "8080:5173"
+    depends_on:
+      - backend
+    networks:
+      - fichadas-network
+    restart: unless-stopped
+
+networks:
+  fichadas-network:
+    driver: bridge
+
+volumes:
+  sqlserver-data:

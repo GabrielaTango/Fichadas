@@ -1,0 +1,41 @@
+Colombraro
+Presupuesto Sistema de administración de control de personal (Fichadas y Lic.)
+
+Objetivo del Proyecto
+Desarrollar un sistema que permita administrar y controlar las fichadas del personal, importadas desde planillas Excel o cargadas manualmente. El objetivo es automatizar el cálculo de horas normales, extras y adicionales, validando llegadas tarde, ausencias y licencias, y generando reportes claros y confiables para el área de Recursos Humanos.
+Alcance del Sistema
+El sistema contará con logueo de usuarios para personal de RRHH, funciones de importación de fichadas, lectura de legajos desde la base de datos de Tango, se podrá realizar en el mismo la clasificación por categoría y sector de los legajos, y el cálculo automático de horas según las reglas de cada área. Permitirá gestionar novedades y licencias, y emitir dos reportes principales: una planilla oficial (horas normales y extras) y una planilla adicional (horas adicionales fuera del horario oficial).
+Funcionalidades Principales
+•	Logueo de usuarios
+•	Importación de fichadas desde Excel.
+•	Clasificación de empleados por sector y categoría.
+•	Asignación de horarios de invierno/verano.
+•	Cálculo automático de horas normales, extras y adicionales. ( * Ver al final Definicion calculo de horas)
+•	Gestión de llegadas tarde y ausencias con tolerancia configurable.
+•	Registro de novedades y licencias con observaciones.
+•	Generación de planillas oficiales y adicionales exportables a Excel o PDF.
+•	Las planillas y funciones de horas adicionales solo serán visible en caso de solicitarlo por el usuario. No estarán disponibles a simple vista.
+Etapas de Trabajo
+El proyecto se desarrollará en 5 etapas principales: relevamiento, diseño de base de datos, desarrollo backend (.NET 8), desarrollo frontend (ReactJs), y pruebas/capacitación. La duración estimada total es de 8 semanas.
+Presupuesto
+Estimamos un total de 95 hs. $3.800.000 para el desarrollo del Proyecto.
+Condiciones Generales
+Plazo estimado de desarrollo: 8 semanas desde la aprobación del presupuesto.
+Observaciones Finales
+Este presupuesto contempla el desarrollo completo del sistema propuesto, con posibilidad de ajustes según requerimientos adicionales. El diseño busca un equilibrio entre funcionalidad, simplicidad y elegancia, garantizando facilidad de uso para el personal administrativo.
+Definición para el cálculo de horas
+Distribución de las horas según sector
+•	Empleados de Maquinas: de 06:00 a 18:00 y de 18:00 a 06:00.
+ Los empleados que trabajan de mañana (06:00 a 18:00) el horario de la planilla oficial es de 06:00 a 16:00 (9 horas normales y 1 hora extra) y el horario de la planilla adicional es de 16:00 a 18:00 (2 horas extras).
+Los empleados que trabajan por la tarde (18:00 a 06:00) el horario de la planilla oficial es de 20:00 a 06:00 (9 horas normales y 1 hora extra (a de las 20:00)). El horario de la planilla adicional de la gente de la tarde es de 18:00 a 20:00 (2 horas extras). Este grupo de empleados, los maquinistas trabajan 12 horas, 9 horas normales y 1 extra, en oficial y 2 horas extras en adicional.
+
+•	Empleados de expedición: de 07:00 a 18:00 (horario verano) y de 08:00 a 18:00 (horario invierno). En el horario de verano, de 07:00 a 18:00 el horario de la planilla oficial es de 07:00 a 17:00 (9 horas normales y 1 hora extra) y el horario de la planilla adicional es de 17:00 a 18:00 (1 horas extra).
+En el horario de invierno, de 08:00 a 18:00 el horario de la planilla oficial es de 08:00 a 18:00 (9 horas normales y 1 hora extra). En este caso, en invierno, no habría horario de la planilla adicional.
+
+•	Empleado de administración: el horario es de 08:30 a 18:00 algunos hacen de 09:00 a 18:00. Ellos no hacen horas extras trabajan 10 horas, pero la décima hora no se la toman como extra. Es el almuerzo. Hay uno que hora que hace, pero es muy pocos.
+
+Todos los empleados en su mayoría entran, por ejemplo, a las 05:43 o 05:54 pero eso no es extra su horario de entrada es a las 06:00 así con todos los casos. Salvo los choferes que si entran a las 04:00 y su entrada normal es a los 07:00 si eso se cuenta como extra.
+La tolerancia de llegadas tarde es de 5’, es decir, que si un empleado entra a las 06:00 y llega a su trabajo y ficha a las 06:06 ya se le descuenta 30’, es decir, media hora. Si su horario de estrada es a las 06:00 y entra 06:36 se le descuenta 1 hora. Se entiende que entre que llega al cuento de trabajo se cambia y se acomoda ya pierde tiempo de trabajo
+
+
+
