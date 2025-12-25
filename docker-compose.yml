@@ -57,7 +57,7 @@ services:
       context: ./Frontend
       dockerfile: Dockerfile
       args:
-        - VITE_API_URL=http://localhost:5210/api
+        - VITE_API_URL=/api
     container_name: fichadas-frontend
     ports:
       - "8080:5173"
